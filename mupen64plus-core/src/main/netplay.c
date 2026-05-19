@@ -88,7 +88,7 @@ m64p_error netplay_start(const char* host, int port)
         return M64ERR_SYSTEM_FAIL;
     }
 
-#if !defined(WIN32)
+#if !defined(WIN32) && !defined(_WIN32)
     const char tos_local = CS4 << 2;
     struct __UDPSocket* socket = (struct __UDPSocket*) l_udpSocket;
     setsockopt(socket->channel, IPPROTO_IP, IP_TOS, &tos_local, sizeof(tos_local));
