@@ -325,7 +325,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
         }
     }
 
-    setupDiscord();
     FPSLabel = new QLabel(this);
     statusBar()->addPermanentWidget(FPSLabel);
 }
@@ -351,55 +350,15 @@ void MainWindow::updateApp()
 #endif
 }
 
-void MainWindow::setupDiscord()
-{
-    QLibrary *discordLib = new QLibrary((QDir(QCoreApplication::applicationDirPath()).filePath("discord_game_sdk")), this);
 
-    memset(&discord_app, 0, sizeof(discord_app));
 
-    DiscordCreateParams params;
-    DiscordCreateParamsSetDefault(&params);
-    params.client_id = 770838334015930398LL;
-    params.flags = DiscordCreateFlags_NoRequireDiscord;
-    params.event_data = &discord_app;
 
-    typedef EDiscordResult (*CreatePrototype)(DiscordVersion version, struct DiscordCreateParams *params, struct IDiscordCore **result);
-    CreatePrototype createFunction = (CreatePrototype)discordLib->resolve("DiscordCreate");
-    if (createFunction)
-        createFunction(DISCORD_VERSION, &params, &discord_app.core);
 
-    if (discord_app.core)
-    {
-        discord_app.activities = discord_app.core->get_activity_manager(discord_app.core);
 
-        QTimer *timer = new QTimer(this);
-        connect(timer, &QTimer::timeout, this, &MainWindow::discordCallback);
-        timer->start(1000);
-    }
-}
 
-struct Discord_Application *MainWindow::getDiscordApp()
-{
-    return &discord_app;
-}
 
-void MainWindow::updateDiscordActivity(struct DiscordActivity activity)
-{
-    if (discord_app.activities)
-        discord_app.activities->update_activity(discord_app.activities, &activity, &discord_app, nullptr);
-}
 
-void MainWindow::clearDiscordActivity()
-{
-    if (discord_app.activities)
-        discord_app.activities->clear_activity(discord_app.activities, &discord_app, nullptr);
-}
 
-void MainWindow::discordCallback()
-{
-    if (discord_app.core)
-        discord_app.core->run_callbacks(discord_app.core);
-}
 
 void MainWindow::updateDownloadFinished(QNetworkReply *reply)
 {
@@ -544,13 +503,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
     closePlugins();
     closeCoreLib();
-
-    if (discord_app.activities)
-        discord_app.activities->clear_activity(discord_app.activities, &discord_app, nullptr);
-    if (discord_app.core)
-    {
-        discord_app.core->run_callbacks(discord_app.core);
-        discord_app.core->destroy(discord_app.core);
     }
 
     settings->setValue("geometry", saveGeometry());
