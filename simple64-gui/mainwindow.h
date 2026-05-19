@@ -1,7 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "discord/discord_game_sdk.h"
 #include "vkwindow.h"
 #include "workerthread.h"
 #include "logviewer.h"
@@ -25,11 +24,6 @@ namespace Ui
     class MainWindow;
 }
 
-struct Discord_Application
-{
-    struct IDiscordCore *core;
-    struct IDiscordActivityManager *activities;
-};
 
 class MainWindow : public QMainWindow
 {
@@ -56,7 +50,6 @@ public:
     void updatePlugins();
     void resetCore();
     m64p_dynlib_handle getCoreLib();
-    struct Discord_Application *getDiscordApp();
     explicit MainWindow(QWidget *parent = 0);
     void updateApp();
     ~MainWindow();
@@ -70,8 +63,6 @@ public slots:
     void createVkWindow(QVulkanInstance *instance);
     void deleteVkWindow();
     void showMessage(QString message);
-    void updateDiscordActivity(struct DiscordActivity activity);
-    void clearDiscordActivity();
     void addFrameCount();
     void setCheats(QJsonObject cheatsData, bool netplay);
 
@@ -80,7 +71,6 @@ private slots:
 
     void updateFrameCount();
 
-    void discordCallback();
 
     void updateDownloadFinished(QNetworkReply *reply);
 
@@ -139,7 +129,6 @@ private slots:
     void on_actionOpen_Discord_Channel_triggered();
 
 private:
-    void setupDiscord();
     void stopGame();
     void updateOpenRecent();
     void updateGB(Ui::MainWindow *ui);
@@ -173,7 +162,6 @@ private:
     m64p_dynlib_handle gfxPlugin;
     m64p_dynlib_handle inputPlugin;
 
-    struct Discord_Application discord_app;
 };
 
 extern MainWindow *w;
