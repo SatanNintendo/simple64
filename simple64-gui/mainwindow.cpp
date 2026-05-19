@@ -503,7 +503,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
     closePlugins();
     closeCoreLib();
-    }
 
     settings->setValue("geometry", saveGeometry());
     settings->setValue("windowState", saveState());
