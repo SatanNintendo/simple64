@@ -3,6 +3,10 @@ set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0")
 
 project(mupen64plus LANGUAGES C)
 
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
+
 if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
     message("Interprocedural optimizations enabled")
