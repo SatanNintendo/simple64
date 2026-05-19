@@ -30,7 +30,7 @@
 #include "netplay.h"
 
 #include <SDL_net.h>
-#if !defined(WIN32)
+#if !defined(WIN32) && !defined(_WIN32)
 #include <netinet/ip.h>
 #endif
 
