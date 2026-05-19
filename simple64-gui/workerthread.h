@@ -7,7 +7,6 @@
 #include <QVulkanInstance>
 #include <QJsonObject>
 #include "interface/common.h"
-#include "discord/discord_game_sdk.h"
 
 class WorkerThread
     : public QThread
@@ -24,8 +23,6 @@ signals:
     void createVkWindow(QVulkanInstance *instance);
     void deleteVkWindow();
     void showMessage(QString message);
-    void updateDiscordActivity(struct DiscordActivity activity);
-    void clearDiscordActivity();
     void addLog(QString text);
     void addFrameCount();
     void setCheats(QJsonObject cheatsData, bool netplay);
