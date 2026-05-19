@@ -1,4 +1,3 @@
-
 #include "workerthread.h"
 #include "vidext.h"
 #include "mainwindow.h"
@@ -28,8 +27,6 @@ void WorkerThread::run()
     connect(this, &WorkerThread::createVkWindow, w, &MainWindow::createVkWindow, Qt::BlockingQueuedConnection);
     connect(this, &WorkerThread::deleteVkWindow, w, &MainWindow::deleteVkWindow, Qt::BlockingQueuedConnection);
     connect(this, &WorkerThread::showMessage, w, &MainWindow::showMessage, Qt::QueuedConnection);
-    connect(this, &WorkerThread::updateDiscordActivity, w, &MainWindow::updateDiscordActivity, Qt::BlockingQueuedConnection);
-    connect(this, &WorkerThread::clearDiscordActivity, w, &MainWindow::clearDiscordActivity, Qt::BlockingQueuedConnection);
     connect(this, &WorkerThread::setCheats, w, &MainWindow::setCheats, Qt::BlockingQueuedConnection);
     connect(this, &WorkerThread::addLog, w->getLogViewer(), &LogViewer::addLog, Qt::QueuedConnection);
     connect(this, &WorkerThread::addFrameCount, w, &MainWindow::addFrameCount, Qt::QueuedConnection);
@@ -51,26 +48,11 @@ void WorkerThread::run()
     {
         m64p_rom_settings rom_settings;
         (*CoreDoCommand)(M64CMD_ROM_GET_SETTINGS, sizeof(rom_settings), &rom_settings);
-        struct DiscordActivity activity;
-        struct DiscordActivityAssets assets;
-        struct DiscordActivityTimestamps timestamps;
-        memset(&activity, 0, sizeof(activity));
-        memset(&assets, 0, sizeof(assets));
-        memset(&timestamps, 0, sizeof(timestamps));
-        QDateTime current = QDateTime::currentDateTimeUtc();
-        timestamps.start = current.currentSecsSinceEpoch();
-        strcpy(assets.large_image, "6205049");
-        strcpy(assets.large_text, "https://simple64.github.io");
-        activity.assets = assets;
-        activity.timestamps = timestamps;
-        strncpy(activity.details, rom_settings.goodname, 128);
-        emit updateDiscordActivity(activity);
 
         emit setCheats(cheats, netplay_port > 0);
 
         res = launchGame(netplay_ip, netplay_port, netplay_player);
 
-        emit clearDiscordActivity();
     }
 
 #ifdef _WIN32
