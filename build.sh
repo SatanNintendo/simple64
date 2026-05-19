@@ -77,28 +77,7 @@ cmake -G Ninja -DCMAKE_BUILD_TYPE="${RELEASE_TYPE}" ..
 cmake --build .
 cp simple64-video-parallel.* "${install_dir}"
 
-if [[ ! -d "${base_dir}/discord" ]]; then
-  echo "Downloading Discord SDK"
-  mkdir -p "${base_dir}/discord"
-  cd "${base_dir}/discord"
-  wget -q https://dl-game-sdk.discordapp.net/2.5.6/discord_game_sdk.zip
-  unzip -q discord_game_sdk.zip
-  rm discord_game_sdk.zip
-fi
 
-if [[ ! -d "${base_dir}/vosk" ]]; then
-  mkdir -p "${base_dir}/vosk"
-  cd "${base_dir}/vosk"
-  if [[ ${UNAME} == *"MINGW64"* ]]; then
-    echo "Downloading Vosk for Windows"
-    wget -q https://github.com/alphacep/vosk-api/releases/download/v0.3.45/vosk-win64-0.3.45.zip
-  elif [[ "${PLATFORM}" == "aarch64" ]]; then
-    echo "Downloading Vosk for Linux aarch64"
-    wget -q https://github.com/alphacep/vosk-api/releases/download/v0.3.45/vosk-linux-aarch64-0.3.45.zip
-  else
-    echo "Downloading Vosk for Linux x86_64"
-    wget -q https://github.com/alphacep/vosk-api/releases/download/v0.3.45/vosk-linux-x86_64-0.3.45.zip
-  fi
   unzip -jq ./*.zip
   rm ./*.zip
 fi
@@ -154,15 +133,11 @@ if [[ ${UNAME} == *"MINGW64"* ]]; then
   cp -v "${MSYSTEM_PREFIX}/bin/libcrypto-3-x64.dll" "${install_dir}" # used by Qt at runtime
   cp -v "${MSYSTEM_PREFIX}/bin/libssl-3-x64.dll" "${install_dir}" # used by Qt at runtime
   cp -v "${base_dir}/7z/x64/7za.exe" "${install_dir}"
-  cp -v "${base_dir}/discord/lib/x86_64/discord_game_sdk.dll" "${install_dir}"
-  cp -v "${base_dir}/vosk/libvosk.dll" "${install_dir}/vosk.dll"
 else
-  cp "${base_dir}/vosk/libvosk.so" "${install_dir}"
   if [[ "${PLATFORM}" == "aarch64" ]]; then
     my_os=linux_aarch64
   else
     my_os=linux_x86_64
-    cp "${base_dir}/discord/lib/x86_64/discord_game_sdk.so" "${install_dir}/libdiscord_game_sdk.so"
   fi
 fi
 
