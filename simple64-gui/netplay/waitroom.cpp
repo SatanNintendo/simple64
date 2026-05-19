@@ -99,17 +99,6 @@ WaitRoom::WaitRoom(QString filename, QJsonObject response, QWebSocket *socket, Q
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &WaitRoom::sendPing);
     timer->start(5000);
-
-    struct DiscordActivity activity;
-    struct DiscordActivityAssets assets;
-    memset(&activity, 0, sizeof(activity));
-    memset(&assets, 0, sizeof(assets));
-    strcpy(assets.large_image, "6205049");
-    strcpy(assets.large_text, "https://simple64.github.io");
-    activity.assets = assets;
-    strncpy(activity.details, response.value("room").toObject().value("game_name").toString().toUtf8().constData(), 128);
-    strcpy(activity.state, "Netplay waiting room");
-    w->updateDiscordActivity(activity);
 }
 
 void WaitRoom::sendPing()
@@ -170,7 +159,6 @@ void WaitRoom::sendChat()
 void WaitRoom::onFinished(int)
 {
     if (!started)
-        w->clearDiscordActivity();
     timer->stop();
     webSocket->close();
     webSocket->deleteLater();
