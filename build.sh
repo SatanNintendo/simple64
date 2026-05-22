@@ -95,9 +95,9 @@ if [[ ${UNAME} == *"MINGW64"* ]]; then
     echo "Downloading 7-zip"
     mkdir -p "${base_dir}/7z"
     cd "${base_dir}/7z"
-    curl -sSL -o 7z2408-extra.7z https://www.7-zip.org/a/7z2408-extra.7z
-    7z x 7z2408-extra.7z
-    rm 7z2408-extra.7z
+    curl -sSL --retry 3 -o 7z-extra.7z "https://github.com/ip7z/7zip/releases/download/24.08/7z2408-extra.7z"
+    7z x 7z-extra.7z
+    rm 7z-extra.7z
   fi
 
   cd "${install_dir}"
