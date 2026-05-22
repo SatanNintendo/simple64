@@ -2,6 +2,7 @@
 
 set -e
 set -o pipefail
+set -x
 
 RELEASE_TYPE="Release"
 
