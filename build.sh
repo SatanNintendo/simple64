@@ -2,7 +2,6 @@
 
 set -e
 set -o pipefail
-set -x
 
 RELEASE_TYPE="Release"
 
@@ -84,17 +83,19 @@ cp simple64-video-parallel.* "${install_dir}"
 
 if [[ ! -f "${base_dir}/cheats.json" ]]; then
   cd "${base_dir}"
-  wget -q https://raw.githubusercontent.com/simple64/cheat-parser/main/cheats.json
+  curl -sSL -o cheats.json https://raw.githubusercontent.com/simple64/cheat-parser/main/cheats.json || echo "Warning: could not download cheats.json, skipping"
 fi
 
-cp "${base_dir}/cheats.json" "${install_dir}"
+if [[ -f "${base_dir}/cheats.json" ]]; then
+  cp "${base_dir}/cheats.json" "${install_dir}"
+fi
 
 if [[ ${UNAME} == *"MINGW64"* ]]; then
   if [[ ! -d "${base_dir}/7z" ]]; then
     echo "Downloading 7-zip"
     mkdir -p "${base_dir}/7z"
     cd "${base_dir}/7z"
-    wget -q https://www.7-zip.org/a/7z2408-extra.7z
+    curl -sSL -o 7z2408-extra.7z https://www.7-zip.org/a/7z2408-extra.7z
     7z x 7z2408-extra.7z
     rm 7z2408-extra.7z
   fi
