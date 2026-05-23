@@ -91,15 +91,6 @@ if [[ -f "${base_dir}/cheats.json" ]]; then
 fi
 
 if [[ ${UNAME} == *"MINGW64"* ]]; then
-  if [[ ! -d "${base_dir}/7z" ]]; then
-    echo "Downloading 7-zip"
-    mkdir -p "${base_dir}/7z"
-    cd "${base_dir}/7z"
-    curl -sSL --retry 3 -o 7z-extra.7z "https://github.com/ip7z/7zip/releases/download/24.08/7z2408-extra.7z"
-    7z x 7z-extra.7z
-    rm 7z-extra.7z
-  fi
-
   cd "${install_dir}"
   windeployqt-qt6.exe --no-translations simple64-gui.exe
   my_os=win64
@@ -133,7 +124,7 @@ if [[ ${UNAME} == *"MINGW64"* ]]; then
   cp -v "${MSYSTEM_PREFIX}/bin/libhidapi-0.dll" "${install_dir}"
   cp -v "${MSYSTEM_PREFIX}/bin/libcrypto-3-x64.dll" "${install_dir}"
   cp -v "${MSYSTEM_PREFIX}/bin/libssl-3-x64.dll" "${install_dir}"
-  cp -v "${base_dir}/7z/x64/7za.exe" "${install_dir}"
+  cp -v "${MSYSTEM_PREFIX}/bin/7za.exe" "${install_dir}"
 else
   if [[ "${PLATFORM}" == "aarch64" ]]; then
     my_os=linux_aarch64
