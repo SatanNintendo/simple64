@@ -46,6 +46,9 @@ jobs:
             qt6:p
             7zip:p
 
+      - name: Find windeployqt
+        run: msys2 -c 'find /mingw64 -name "windeployqt*" 2>/dev/null'
+
       - name: Run build script
         run: msys2 -c 'export PATH=$PATH:/mingw64/bin; export SIMPLE64_AUTOUPDATE=1; export NETPLAY_AUTH_CODE=${{ secrets.NETPLAY_AUTH_CODE }}; ./build.sh zip'
       - name: Upload zip
