@@ -47,7 +47,7 @@ jobs:
             7zip:p
 
       - name: Run build script
-        run: msys2 -c 'export SIMPLE64_AUTOUPDATE=1; export NETPLAY_AUTH_CODE=${{ secrets.NETPLAY_AUTH_CODE }}; ./build.sh zip'
+        run: msys2 -c 'export PATH=$PATH:/mingw64/bin; export SIMPLE64_AUTOUPDATE=1; export NETPLAY_AUTH_CODE=${{ secrets.NETPLAY_AUTH_CODE }}; ./build.sh zip'
       - name: Upload zip
         uses: actions/upload-artifact@v4
         with:
