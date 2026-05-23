@@ -92,7 +92,12 @@ fi
 
 if [[ ${UNAME} == *"MINGW64"* ]]; then
   cd "${install_dir}"
-  windeployqt-qt6.exe --no-translations simple64-gui.exe
+  WINDEPLOYQT=$(find /d /c /mingw64 -name "windeployqt-qt6.exe" 2>/dev/null | head -1)
+  if [[ -z "${WINDEPLOYQT}" ]]; then
+    WINDEPLOYQT=$(find /d /c /mingw64 -name "windeployqt6.exe" 2>/dev/null | head -1)
+  fi
+  echo "Found windeployqt at: ${WINDEPLOYQT}"
+  "${WINDEPLOYQT}" --no-translations simple64-gui.exe
   my_os=win64
 
   # shellcheck disable=SC2154
